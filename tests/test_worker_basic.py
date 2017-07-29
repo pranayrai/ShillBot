@@ -59,6 +59,33 @@ class TestWorkerBasic(unittest.TestCase):
         len_to_crawl_after = len(worker.to_crawl)
 
         self.assertEqual(len_to_crawl_after, len_to_crawl_before)
+       
+    def test_worker_add_empty_list_links(self):
+        worker = BasicUserParseWorker("https://www.reddit.com/user/Chrikelnel")
+        
+        before = len(worker.to_crawl)
+        worker.add_links([])
+        after = len(worker.to_crawl)
+        
+        self.assertEqual(before_links, after_links)       
+    
+        
+    def test_worker_add_links_max_limit(self):
+        worker = None
+        worker = BasicUserParseWorker("https://www.reddit.com/user/Chrikelnel")
+
+        worker.max_links = 0
+        len_to_crawl_before = len(worker.to_crawl)
+        worker.add_links("test.com")
+        len_to_crawl_after = len(worker.to_crawl)
+
+        self.assertEqual(len_to_crawl_after, len_to_crawl_before)
+     
+    def test_worker_invalid_URL(self):
+        worker = BasicUserParseWorker("http://kfjdjdsytdggdttfhbgu.com/")
+        self.assertRaises(WorkerException,worker.run)
+
+	
 
 
 
